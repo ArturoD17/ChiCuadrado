@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Chi-cuadrado (χ²)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        nav {
+            background-color: #2c3e50;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+        nav ul li {
+            position: relative;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            display: block;
+        }
+        nav ul li:hover > ul {
+            display: block;
+        }
+        nav ul li ul {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #34495e;
+            padding: 0;
+            list-style: none;
+        }
+        nav ul li ul li a {
+            padding: 10px;
+            width: 200px;
+            white-space: nowrap;
+        }
+        nav ul li ul li a:hover {
+            background-color: #3e5b76;
+        }
+        #content {
+            padding: 20px;
+            border: 1px solid #ccc;
+            background: #f9f9f9;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+    <script>
+        // Función para cargar contenido en el área principal
+        function loadContent(type) {
+            const contentArea = document.getElementById('content');
+            let content = '';
+
+            if (type === 'inicio') {
+                content = `
+                    <h2>Test de Chi-cuadrado (χ²)</h2>
+                    <p>
+                        El test de Chi-cuadrado es una prueba de hipótesis que compara la distribución observada de los datos 
+                        con una distribución esperada. Existen varios tipos de prueba de Chi-cuadrado:
+                    </p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Prueba</th>
+                                <th>Número de muestras</th>
+                                <th>Usos</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Bondad de ajuste</td>
+                                <td>Una muestra</td>
+                                <td>Probar H0 de que los datos se ajustan a una distribución teórica</td>
+                            </tr>
+                            <tr>
+                                <td>Independencia</td>
+                                <td>Una muestra</td>
+                                <td>Probar H0 de que en la población estudiada existe independencia entre las variables</td>
+                            </tr>
+                            <tr>
+                                <td>Homogeneidad</td>
+                                <td>Dos o más muestras</td>
+                                <td>Probar H0 de que las muestras extraídas provienen de una población homogénea</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h3>Planteamiento de la hipótesis</h3>
+                    <h4>Hipótesis Prueba de Bondad de ajuste:</h4>
+                    <p> H0: Los datos se ajustan a una distribución teórica.</p>
+                    <p> H1: Los datos no se ajustan a una distribución teórica.</p>
+
+                    <h4>Hipótesis Prueba de Independencia:</h4>
+                    <p>H0: Las variables categóricas son independientes (no hay asociación).</p>
+                    <p>H1: Las variables categóricas no son independientes (hay asociación).</p>
+                    
+                    <h4>Hipótesis Prueba de Homogeneidad:</h4>
+                    <p>H0: Las muestras extraídas provienen de una población homogénea.</p>
+                    <p>H1: Las muestras extraídas NO provienen de una población homogénea.</p>
+                    
+                    <h3>Limitaciones y Reglas de Decisión</h3>
+                    <h4>Limitaciones</h4>
+                    <p>Como todos los test estadísticos, el test de Chi-cuadrado tiene sus limitaciones y sus reglas de decisión:</p>
+                    <p>En las limitaciones podemos encontrar 3 principales:</p>
+                    <ul>
+                        <li>Para aplicar el chi cuadrado se necesita que más del 20% de los valores esperados estén por encima de 5 y ninguna celda tenga un valor esperado menor a 1.</li>
+                        <li>Si la tabla es de 2x2 (tabla de contingencia o cruzada), todas las celdas deben tener valores esperados por encima de 5.</li>
+                        <li>Si no se cumple la regla de la tabla 2x2 (si existe una celda con valor esperado menor que 5), se utilizará la Prueba de Probabilidades Exactas de Fisher en lugar de la Prueba X², ya que no es posible agrupar categorías en este caso.</li>
+                    </ul>
+
+                    <h4>Reglas de Decisión</h4>
+                    <p>
+                        Las reglas de decisión dependen de la comparación del valor calculado con el valor crítico de la tabla de Chi-cuadrado, 
+                        o bien, del valor p calculado. Si el valor p es menor que el nivel de significancia (por ejemplo, 0.05), se rechaza la hipótesis nula (H0).
+                    </p>
+                    <img src="file:///C:/Users/Lenovo/Desktop/esquema%20de%20la%20reglas%20de%20decision.png" alt="Descripción de la imagen" width="500">
+                `;
+            } else if (type === 'bondad') {
+                content = `
+                    <h2>Prueba de Bondad de ajuste</h2>
+                    <p>Esta prueba se aplica a una sola muestra y tiene como objetivo probar la hipótesis nula de que los datos se ajustan a una distribución teórica.</p>
+                    <h3>Hipótesis:</h3>
+                    <ul>
+                        <li>H0: Los datos se ajustan a una distribución teórica.</li>
+                        <li>H1: Los datos no se ajustan a una distribución teórica.</li>
+                    </ul>
+                    <h3>Tabla de datos:</h3>
+                   <img src="file:///C:/Users/Lenovo/Desktop/imagen%20de%20bondad%20de%20ajuste.png" alt="Imagen de bondad de ajuste" width="700">
+
+
+                    <h3>Instrucciones:</h3>
+                    <ol>
+                        <li>En SPSS, ir al menú <b>Analizar</b> > <b>Pruebas no paramétricas</b> > <b>Cuadro de diálogos antiguos</b> > <b>Chi Cuadrado</b>.</li>
+                        <li>Seleccionar la variable <i>Condición nutricional</i> y pasarla a la lista de pruebas.</li>
+                        <li>Hacer clic en <b>Aceptar</b>.</li>
+                    </ol>
+                    <h3>Decisión:</h3>
+                    <p>Si el valor p es menor que el nivel de significancia (por ejemplo, 0.05), se rechaza H0. Esto indica que los datos no se ajustan a la distribución teórica esperada.</p>
+                `;
+            } else if (type === 'independencia') {
+                content = `
+                    <h2>Prueba de Independencia</h2>
+                    <p>Esta prueba se aplica a una sola muestra y tiene como objetivo probar la hipótesis nula de que las variables categóricas son independientes (sin asociación).</p>
+                    <h3>Hipótesis:</h3>
+                    <ul>
+                        <li>H0: Las variables categóricas son independientes (no hay asociación).</li>
+                        <li>H1: Las variables categóricas no son independientes (hay asociación).</li>
+                    </ul>
+                    <h3>Tabla de datos:</h3>
+                    <img src="file:///C:/Users/Lenovo/Desktop/imagen%20de%20independencia.png" alt="Imagen de independencia" width="700">
+
+
+                    <h3>Instrucciones:</h3>
+                    <ol>
+                        <li>En SPSS, ir a <b>Analizar</b> > <b>Estadísticos</b> > <b>Tablas cruzadas</b>.</li>
+                        <li>Seleccionar las variables para las Fila: ponemos "Estados nutricional de las personas entrevistadas" y 
+                        Columna: "Sexo de las personas entrevistadas, y luego hacer clic en <b>OK</b>.</li>
+                        <li>Luego ahora vamos al <b>botón de ESTADISTICOS</b>  y marcamos <b>CHI Cuadrado</b> y clic en <b>continuar</b>.</li>
+                        <li>Luego en <b>casillas</b> marcamos que nos muestres valores <b>Observados</b> y <b>Esperados</b> y clic en <b>continuar</b> y finalmente <b>aceptar</b>.</li>
+                        </ol>
+                    <h3>Decisión:</h3>
+                    <p>Si el valor p es menor que el nivel de significancia (por ejemplo, 0.05), se rechaza H0. Esto indica que existe una relación entre las variables.</p>
+                `;
+            } else if (type === 'homogeneidad') {
+                content = `
+                    <h2>Prueba de Homogeneidad</h2>
+                    <p>Esta prueba se aplica cuando se tienen dos o más muestras y tiene como objetivo comprobar si estas muestras provienen de la misma población homogénea.</p>
+                    <h3>Hipótesis:</h3>
+                    <ul>
+                        <li>H0: Las muestras provienen de una población homogénea.</li>
+                        <li>H1: Las muestras no provienen de una población homogénea.</li>
+                    </ul>
+                    <h3>Tabla de datos:</h3>
+                    <img src="file:///C:/Users/Lenovo/Desktop/imagen%20de%20homogeneidad.png" alt="Imagen de Bondad de ajuste" width="700">
+
+                    <h3>Instrucciones:</h3>
+                    <ol>
+                        <li>En SPSS, ir a <b>Analizar</b> > <b>Estadísticos</b> > <b>Tablas cruzadas</b>.</li>
+                        <li>Seleccionar las variables para las Fila: Nivel educativo alcanzado y Columna: Periodos en que se realizaron las entrevistas .</li>
+                        <li>Luego ahora vamos al <b>botón de ESTADISTICOS</b>  y marcamos <b>CHI Cuadrado</b> y clic en <b>continuar</b>.</li>
+                        <li>Luego en el <b>botón casillas</b>  marcamos <b>observados</b> y <b>esperados</b> y <b>continuar</b> y <b>aceptar</b>.</li>
+                    </ol>
+                    <h3>Decisión:</h3>
+                    <p>Si el valor p es menor que el nivel de significancia (por ejemplo, 0.05), se rechaza H0. Esto indica que las muestras no provienen de la misma población homogénea.</p>
+                `;
+            }
+
+            contentArea.innerHTML = content;
+        }
+    </script>
+</head>
+<body onload="loadContent('inicio')">
+    <nav>
+        <ul>
+            <li><a href="#" onclick="loadContent('inicio')">Inicio</a></li>
+            <li>
+                <a href="#">Tipos de Chi-cuadrado</a>
+                <ul>
+                    <li><a href="#" onclick="loadContent('bondad')">Bondad de ajuste</a></li>
+                    <li><a href="#" onclick="loadContent('independencia')">Independencia</a></li>
+                    <li><a href="#" onclick="loadContent('homogeneidad')">Homogeneidad</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <div id="content">
+        <!-- Aquí se cargará dinámicamente el contenido -->
+        
+
+    </div>
+</body>
+</html>
